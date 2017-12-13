@@ -6,8 +6,8 @@ try {
   header('Access-Control-Allow-Origin: *');
 
   // mi faccio dare dall'utente usrname e password
-  $username = $_GET['username'];
-  $password = $_GET['password'];
+  $username = $_POST['username'];
+  $password = $_POST['password'];
 
   // creo la query parametrizzata
   $query = 'SELECT * FROM USERS WHERE USERNAME = :usrn';

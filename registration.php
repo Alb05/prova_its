@@ -6,16 +6,16 @@ try {
   header('Access-Control-Allow-Origin: *');
 
   // mi faccio dare dall'utente i dati
-  $username = $_GET['username'];
-  $first_name = $_GET['firstname'];
-  $last_name = $_GET['lastname'];
-  $mail = $_GET['mail'];
-  $phone = $_GET['phone'];
-  $address = $_GET['address'];
-  $city = $_GET['city'];
-  $password = $_GET['password'];
-  $postal_code = $_GET['postalcode'];
-  $country = $_GET['country'];
+  $username = $_POST['username'];
+  $first_name = $_POST['firstname'];
+  $last_name = $_POST['lastname'];
+  $mail = $_POST['mail'];
+  $phone = $_POST['phone'];
+  $address = $_POST['address'];
+  $city = $_POST['city'];
+  $password = $_POST['password'];
+  $postal_code = $_POST['postalcode'];
+  $country = $_POST['country'];
 
   // creo un array che conterrà lq righe restituitedal db
   $data = array();
