@@ -14,7 +14,7 @@ if (isset($_SESSION['utente'])) {
       $order_stmt = oci_parse($conn, $order_query);
       oci_bind_by_name($order_stmt, ':userid', $user['USER_ID']);
       if (oci_execute($order_stmt)) {
-        $order = oci_fetch_assoc($statement);
+        $order = oci_fetch_assoc($order_stmt);
         oci_free_statement($order_stmt);
 
         foreach ($_SESSION['carrello'] as $book) {
@@ -22,7 +22,7 @@ if (isset($_SESSION['utente'])) {
           $quantity_stmt = oci_parse($conn, $quantity_query);
           oci_bind_by_name($quantity_stmt, ':bookid', $book['BOOK_ID']);
           if (oci_execute($quantity_stmt)) {
-            $row = oci_fetch_assoc($statement);
+            $row = oci_fetch_assoc($quantity_stmt);
             if ($row['QUANTITY'] >= $book['QUANTITY']) {
               $modify_query = 'UPDATE WAREHOUSE SET QUANTITY=:bookqty WHERE BOOK_ID = :bookid';
               $modify_stmt = oci_parse($conn, $modify_query);
@@ -36,7 +36,7 @@ if (isset($_SESSION['utente'])) {
               $insert2_stmt = oci_parse($conn, $insert2_query);
               oci_bind_by_name($insert2_stmt, ':ordid', $order['ORDER_ID']);
               oci_bind_by_name($insert2_stmt, ':bookid', $book['BOOK_ID']);
-              oci_bind_by_name($insert2_stmt, ':bookid', $book['QUANTITY']);
+              oci_bind_by_name($insert2_stmt, ':bookqty', $book['QUANTITY']);
               oci_execute($insert2_stmt);
               oci_free_statement($insert2_stmt);
             }
@@ -45,6 +45,7 @@ if (isset($_SESSION['utente'])) {
               echo "<p>non è possibile effettuare l'ordine</p>";
               $_SESSION['carrello'] = array();
               header('refresh:3;elenco.php');
+              exit();
             }
           }
         }

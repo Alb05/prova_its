@@ -28,12 +28,11 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
     <a href="logout.php"><button>Logout</button></a>
     <a href="elenco.php"><button>Torna agli acquisti</button></a>
     <?php
-    if (count($_SESSION['carrello']) > 0) {
-      echo '<a href="ordina.php"><button>Acquista</button></a><br><br>';
+    if (count($_SESSION['carrello']) == 0) {
+      echo '<br><br><p>Il tuo carrello è vuoto</p>';
     }
     else {
-      echo '<br><br>';
-    }
+      echo '<a href="ordina.php"><button>Acquista</button></a><br><br>';
     ?>
     <table cellpadding="8px" border="1px">
       <thead>
@@ -45,9 +44,7 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
       </thead>
       <tbody>
         <?php
-        if (count($_SESSION['carrello']) == 0) {
-          echo '<p>il tuo carrello è vuoto</p>';
-        } else {
+        if (count($_SESSION['carrello']) > 0) {
           foreach ($_SESSION['carrello'] as $libro) {
             $query = 'SELECT TITLE, DESCRIPTION, PRICE FROM BOOKS WHERE BOOK_ID = :bookid';
             $statement = oci_parse($conn, $query);
@@ -62,6 +59,9 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
         ?>
       </tbody>
     </table>
+    <?php
+    }
+    ?>
   </body>
 </html>
 <?php
