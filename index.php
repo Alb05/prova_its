@@ -50,6 +50,8 @@
           $input = hash('sha512', $password.$user['SALT']);
           //controllo che la password sia uguale alla password sul db
           if (strcmp($input, $user['PASSWORD']) == 0) {
+            $_SESSION['utente'] = $data;
+            $_SESSION['carrello'] = array();
             header('LOCATION:elenco.php');
           } else {
             echo '<p>la password non è corretta</p>';
