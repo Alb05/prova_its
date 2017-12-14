@@ -4,6 +4,8 @@ try {
   // aggiungo gli header per restituire json
   header('Content-Type: application/json;charset=utf-8');
   header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
   // mi faccio dare dall'utente usrname e password
   $username = $_POST['username'];
@@ -33,18 +35,23 @@ try {
       //controllo che la password sia uguale alla password sul db
       if (strcmp($input, $user['PASSWORD']) == 0) {
         echo json_encode($data[0]);
+        //http_response_code(200);
       } else {
         echo json_encode(NULL);
+        //http_response_code(200);
       }
     } else {
       echo json_encode(NULL);
+      //http_response_code(500);
     }
   } else {
     echo json_encode(NULL);
+    //http_response_code(500);
   }
   oci_free_statement($statement);
 }
 finally {
   // chiudo le connessioni
   oci_close($conn);
+  exit();
 }

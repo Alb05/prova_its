@@ -4,6 +4,8 @@ try {
   // aggiungo gli header per restituire json
   header('Content-Type: application/json;charset=utf-8');
   header('Access-Control-Allow-Origin: *');
+  header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
   // mi faccio dare dall'utente i dati
   $username = $_POST['username'];
