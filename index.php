@@ -9,7 +9,7 @@
   </head>
   <body>
   <?php
-  if (!isset($_POST['username']) && !isset($_POST['username'])) {
+  if (!isset($_POST['username']) && !isset($_POST['password'])) {
   ?>
   <h1>Login</h1>
   <form action="index.php" method="POST">
@@ -17,8 +17,9 @@
     <input type="text" id="username" name="username" size="32" maxlength="32" value=""/><br><br>
     <label for="password">Password</label>
     <input type="password" id="password" name="password" size="32" value=""/><br><br>
-    <input type="submit" value="Login">
+    <input type="submit" value="Login"><br><br>
   </form>
+  <a href="registration.php">Registrati</a>
   <?php
   } else {
     try {
@@ -52,15 +53,15 @@
             header('LOCATION:elenco.php');
           } else {
             echo '<p>la password non è corretta</p>';
-            //header('LOCATION:index.php');
+            header('refresh:5;index.php');
           }
         } else {
           echo "<p>l'utente ".$username." non esiste</p>";
-          //header('LOCATION:index.php');
+          header('refresh:5;index.php');
         }
       } else {
         echo '<p>Oops something went horribly wrong :(</p>';
-        //header('LOCATION:index.php');
+        header('refresh:5;index.php');
       }
       oci_free_statement($statement);
     }
