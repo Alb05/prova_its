@@ -1,12 +1,22 @@
 <?php
 include('conn.php');
 if (isset($_SESSION['utente'])) {
+try {
 if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
-  $_SESSION['carrello'][] = array('BOOK_ID' => $_POST['bookid'], 'QUANTITY' => $_POST['bookqty']);
+  $inserted = false;
+  for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+    if ($_SESSION['carrello'][$i]['BOOK_ID'] == $_POST['bookid']) {
+      $_SESSION['carrello'][$i]['QUANTITY'] += $_POST['bookqty'];
+      $inserted = true;
+    }
+  }
+  if (!$inserted) {
+    $_SESSION['carrello'][] = array('BOOK_ID' => $_POST['bookid'], 'QUANTITY' => $_POST['bookqty']);
+  }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,13 +26,22 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
   <body>
     <h1>Carrello</h1>
     <a href="logout.php"><button>Logout</button></a>
-    <a href="elenco.php"><button>Torna agli acquisti</button></a><br>
+    <a href="elenco.php"><button>Torna agli acquisti</button></a>
+    <?php
+    if (count($_SESSION['carrello']) > 0) {
+      echo '<a href="ordina.php"><button>Acquista</button></a><br><br>';
+    }
+    else {
+      echo '<br><br>';
+    }
+    ?>
     <table cellpadding="8px" border="1px">
       <thead>
         <th>Titolo</th>
         <th>Descrizione</th>
         <th>Quantità</th>
         <th>Prezzo Totale</th>
+        <th>Rimuovi</th>
       </thead>
       <tbody>
         <?php
@@ -46,6 +65,10 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
   </body>
 </html>
 <?php
+}
+finally {
+  oci_close($conn);
+}
 } else {
   echo '<p>non sei loggato</p>';
   header('refresh:3;index.php');
