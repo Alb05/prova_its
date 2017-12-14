@@ -12,7 +12,8 @@ if (isset($_SESSION['utente'])) {
   </head>
   <body>
     <h1>Elenco</h1>
-    <a href="logout.php">logout</a>
+    <a href="logout.php"><button>Logout</button></a>
+    <a href="carrello.php"><button>Carrello</button></a><br>
     <form action="elenco.php" method="GET">
       <select name="catSelect" id="catSelect">
         <option value="0">All</option>
@@ -39,7 +40,7 @@ if (isset($_SESSION['utente'])) {
         <th>Data di pubblicazione</th>
         <th>Prezzo</th>
         <th>Quantità disponibile</th>
-        <th>Ordina</th>
+        <th>Aggiungi</th>
       </thead>
       <tbody>
       <?php
@@ -54,7 +55,7 @@ if (isset($_SESSION['utente'])) {
           
           while ($row = oci_fetch_assoc($statement)) {
             if (count($row) > 0) {
-              $str = '<tr><td>'.$row['TITLE'].'</td><td>'.$row['ISBN'].'</td><td>'.$row['AUTHOR'].'</td><td>'.$row['CATEGORY_NAME'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$row['PAGES'].'</td><td>'.$row['PUB_DATE'].'</td><td>'.$row['PRICE'].' €</td><td>'.$row['QUANTITY'].'</td><td><form action="carrello.php"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
+              $str = '<tr><td>'.$row['TITLE'].'</td><td>'.$row['ISBN'].'</td><td>'.$row['AUTHOR'].'</td><td>'.$row['CATEGORY_NAME'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$row['PAGES'].'</td><td>'.$row['PUB_DATE'].'</td><td>'.$row['PRICE'].' €</td><td>'.$row['QUANTITY'].'</td><td><form action="carrello.php" method="POST"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
               for ($i = 1; $i <= intval($row['QUANTITY']); $i++) {
                 $str .= '<option value='.$i.'>'.$i.'</option>';
               }
@@ -76,7 +77,7 @@ if (isset($_SESSION['utente'])) {
           
           while ($row2 = oci_fetch_assoc($statement2)) {
             if (count($row2) > 0) {
-              $str2 = '<tr><td>'.$row2['TITLE'].'</td><td>'.$row2['ISBN'].'</td><td>'.$row2['AUTHOR'].'</td><td>'.$row2['CATEGORY_NAME'].'</td><td>'.$row2['DESCRIPTION'].'</td><td>'.$row2['PAGES'].'</td><td>'.$row2['PUB_DATE'].'</td><td>'.$row2['PRICE'].' €</td><td>'.$row2['QUANTITY'].'</td><td><form action="carrello.php"><input type="hidden" name="bookid" value="'.$row2['BOOK_ID'].'"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
+              $str2 = '<tr><td>'.$row2['TITLE'].'</td><td>'.$row2['ISBN'].'</td><td>'.$row2['AUTHOR'].'</td><td>'.$row2['CATEGORY_NAME'].'</td><td>'.$row2['DESCRIPTION'].'</td><td>'.$row2['PAGES'].'</td><td>'.$row2['PUB_DATE'].'</td><td>'.$row2['PRICE'].' €</td><td>'.$row2['QUANTITY'].'</td><td><form action="carrello.php" method="POST"><input type="hidden" name="bookid" value="'.$row2['BOOK_ID'].'"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
               for ($j = 1; $j <= intval($row2['QUANTITY']); $j++) {
                 $str2 .= '<option value='.$j.'>'.$j.'</option>';
               }

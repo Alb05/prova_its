@@ -1,4 +1,8 @@
 <?php
 include('conn.php');
-session_destroy();
-header('LOCATION:index.php');
+if (isset($_SESSION['utente'])) {
+  session_destroy();
+  header('LOCATION:index.php');
+} else {
+  header('LOCATION:index.php');
+}

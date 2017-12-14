@@ -11,7 +11,8 @@
   <?php
   if (!isset($_POST['username']) && !isset($_POST['password']) && !isset($_POST['firstname']) && !isset($_POST['lastname']) && !isset($_POST['mail']) && !isset($_POST['phone']) && !isset($_POST['address']) && !isset($_POST['city']) && !isset($_POST['postalcode']) && !isset($_POST['country'])) {
   ?>
-  <h1>Register</h1>
+  <h1>Registrazione</h1>
+  <a href="index.php"><button>Torna alla Login</button></a><br><br>
   <form action="registration.php" method="POST">
     <label for="username">Username</label>
     <input type="text" id="username" name="username" size="32" maxlength="32" value=""/><br><br>
@@ -33,7 +34,7 @@
     <input type="text" id="postalcode" name="postalcode" size="16" maxlength="16" value=""/><br><br>
     <label for="country">Country</label>
     <input type="text" id="country" name="country" size="32" maxlength="32" value=""/><br><br>
-    <input type="submit" value="Login"><br><br>
+    <input type="submit" value="Registrati"><br><br>
   </form>
 
   <?php
