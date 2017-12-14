@@ -53,15 +53,15 @@
             header('LOCATION:elenco.php');
           } else {
             echo '<p>la password non è corretta</p>';
-            header('refresh:5;index.php');
+            header('refresh:3;index.php');
           }
         } else {
           echo "<p>l'utente ".$username." non esiste</p>";
-          header('refresh:5;index.php');
+          header('refresh:3;index.php');
         }
       } else {
         echo '<p>Oops something went horribly wrong :(</p>';
-        header('refresh:5;index.php');
+        header('refresh:3;index.php');
       }
       oci_free_statement($statement);
     }

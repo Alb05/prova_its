@@ -12,7 +12,7 @@
   if (!isset($_POST['username']) && !isset($_POST['password']) && !isset($_POST['firstname']) && !isset($_POST['lastname']) && !isset($_POST['mail']) && !isset($_POST['phone']) && !isset($_POST['address']) && !isset($_POST['city']) && !isset($_POST['postalcode']) && !isset($_POST['country'])) {
   ?>
   <h1>Register</h1>
-  <form action="register.php" method="POST">
+  <form action="registration.php" method="POST">
     <label for="username">Username</label>
     <input type="text" id="username" name="username" size="32" maxlength="32" value=""/><br><br>
     <label for="password">Password</label>
@@ -33,7 +33,6 @@
     <input type="text" id="postalcode" name="postalcode" size="16" maxlength="16" value=""/><br><br>
     <label for="country">Country</label>
     <input type="text" id="country" name="country" size="32" maxlength="32" value=""/><br><br>
-
     <input type="submit" value="Login"><br><br>
   </form>
 
@@ -93,25 +92,27 @@
           if (oci_execute($insert_statement)) {
             // faccio il commit delle modifiche
             if (oci_commit($conn)) {
-              echo json_encode(true);
+              echo "<p>registrazione avvenuta con successo!</p>";
+              header('refresh:3;index.php');
             } else {
-              echo json_encode(false);
+              echo "<p>errore di commit</p>";
             }
           } else {
-            echo json_encode(false);
+            echo "<p>errore query inserimento</p>";
           }
           oci_free_statement($insert_statement);
         } else {
-          echo json_encode(false);
+          echo "<p>l'utente esiste già</p>";
         }
       } else {
-        echo json_encode(false);
+        echo "<p>errore query ricerca</p>";
       }
     }
     finally {
       // chiudo le connessioni
       oci_close($conn);
     }
+  }
   ?>
   </body>
 </html>
