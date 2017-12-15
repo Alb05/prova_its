@@ -47,7 +47,7 @@ if (isset($_SESSION['utente'])) {
       try {
         if (!isset($_GET['catSelect']) || $_GET['catSelect'] == 0) {
           // creo la query parametrizzata
-          $query = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID ORDER BY b.TITLE';
+          $query = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 ORDER BY b.TITLE';
 
           // eseguo la query sul db passando l'username al parametro :usrn
           $statement = oci_parse($conn, $query);
@@ -68,7 +68,7 @@ if (isset($_SESSION['utente'])) {
           oci_free_statement($statement);
         } else {
           // creo la query parametrizzata
-          $query2 = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND b.CATEGORY_ID = :cat ORDER BY b.TITLE';
+          $query2 = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND b.CATEGORY_ID = :cat ORDER BY b.TITLE';
 
           // eseguo la query sul db passando l'username al parametro :usrn
           $statement2 = oci_parse($conn, $query2);
