@@ -51,7 +51,7 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
             oci_bind_by_name($statement, ':bookid', $libro['BOOK_ID']);
             oci_execute($statement);
             while ($row = oci_fetch_assoc($statement)) {
-              echo '<tr><td>'.$row['TITLE'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$libro['QUANTITY'].'</td><td>'.($row['PRICE']*$libro['QUANTITY']).'</td></tr>';
+              echo '<tr><td>'.$row['TITLE'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$libro['QUANTITY'].'</td><td>'.($row['PRICE']*$libro['QUANTITY']).'</td><td><form action="rimuovi.php" method="POST"><input type="hidden" name="bookid" value="'.$libro['BOOK_ID'].'"><input type="submit" value="rimuovi dal carrello"></form></td></tr>';
             }
             oci_free_statement($statement);
           }
