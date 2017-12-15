@@ -71,42 +71,52 @@
           // creo la query parametrizzata per l'inserimento
           $insert_query = 'INSERT INTO USERS (USERNAME, FIRST_NAME, LAST_NAME, MAIL, PHONE, ADDRESS, CITY, SALT, PASSWORD, GROUP_ID, CREATED_AT, POSTAL_CODE, COUNTRY) VALUES (:username, :firstname, :lastname, :mail, :phone, :address, :city, :salt, :password, 2, CURRENT_DATE, :postalcode, :country)';
           
-          // genero il sale e la password
-          $salt = hash('sha512', openssl_random_pseudo_bytes(128));
-          $password_hash = hash('sha512', $password.$salt);
+          // controllo che la mail sia corretta
+          if (preg_match('/^.*\@.*\..*$/', $mail)) {
+            // genero il sale e la password
+            $salt = hash('sha512', openssl_random_pseudo_bytes(128));
+            $password_hash = hash('sha512', $password.$salt);
 
-          // eseguo la query sul db passando l'username al parametro :usrn
-          $insert_statement = oci_parse($conn, $insert_query);
-          oci_bind_by_name($insert_statement, ':username', $username);
-          oci_bind_by_name($insert_statement, ':firstname', $first_name);
-          oci_bind_by_name($insert_statement, ':lastname', $last_name);
-          oci_bind_by_name($insert_statement, ':mail', $mail);
-          oci_bind_by_name($insert_statement, ':phone', $phone);
-          oci_bind_by_name($insert_statement, ':address', $address);
-          oci_bind_by_name($insert_statement, ':city', $city);
-          oci_bind_by_name($insert_statement, ':salt', $salt);
-          oci_bind_by_name($insert_statement, ':password', $password_hash);
-          oci_bind_by_name($insert_statement, ':postalcode', $postal_code);
-          oci_bind_by_name($insert_statement, ':country', $country);
+            // eseguo la query sul db passando l'username al parametro :usrn
+            $insert_statement = oci_parse($conn, $insert_query);
+            oci_bind_by_name($insert_statement, ':username', $username);
+            oci_bind_by_name($insert_statement, ':firstname', $first_name);
+            oci_bind_by_name($insert_statement, ':lastname', $last_name);
+            oci_bind_by_name($insert_statement, ':mail', $mail);
+            oci_bind_by_name($insert_statement, ':phone', $phone);
+            oci_bind_by_name($insert_statement, ':address', $address);
+            oci_bind_by_name($insert_statement, ':city', $city);
+            oci_bind_by_name($insert_statement, ':salt', $salt);
+            oci_bind_by_name($insert_statement, ':password', $password_hash);
+            oci_bind_by_name($insert_statement, ':postalcode', $postal_code);
+            oci_bind_by_name($insert_statement, ':country', $country);
 
-          // eseguo la query di inserimento
-          if (oci_execute($insert_statement)) {
-            // faccio il commit delle modifiche
-            if (oci_commit($conn)) {
-              echo "<p>registrazione avvenuta con successo!</p>";
-              header('refresh:3;index.php');
+            // eseguo la query di inserimento
+            if (oci_execute($insert_statement)) {
+              // faccio il commit delle modifiche
+              if (oci_commit($conn)) {
+                echo "<p>registrazione avvenuta con successo!</p>";
+                header('refresh:3;index.php');
+              } else {
+                echo "<p>errore di commit</p>";
+                header('refresh:3;index.php');
+              }
             } else {
-              echo "<p>errore di commit</p>";
+              echo "<p>errore query inserimento</p>";
+              header('refresh:3;index.php');
             }
           } else {
-            echo "<p>errore query inserimento</p>";
+            echo "<p>la mail fornita non è valida</p>";
+            header('refresh:3;index.php');
           }
           oci_free_statement($insert_statement);
         } else {
           echo "<p>l'utente esiste già</p>";
+          header('refresh:3;index.php');
         }
       } else {
         echo "<p>errore query ricerca</p>";
+        header('refresh:3;index.php');
       }
     }
     finally {
