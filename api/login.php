@@ -14,7 +14,7 @@ try {
   // creo la query parametrizzata
   $query = 'SELECT * FROM USERS WHERE USERNAME = :usrn';
 
-  // creo un array che conterrà lq righe restituitedal db
+  // creo un array che conterrà le righe restituite dal db
   $data = array();
 
   // eseguo la query sul db passando l'username al parametro :usrn
