@@ -19,7 +19,7 @@
     <input type="password" id="password" name="password" size="32" value=""/><br><br>
     <input type="submit" value="Login"><br><br>
   </form>
-  <a href="registration.php">Registrati</a>
+  <p>Non sei registrato? <a href="registration.php"><button>Registrati</button></a></p>
   <?php
   } else {
     try {
@@ -50,6 +50,8 @@
           $input = hash('sha512', $password.$user['SALT']);
           //controllo che la password sia uguale alla password sul db
           if (strcmp($input, $user['PASSWORD']) == 0) {
+            $_SESSION['utente'] = $data;
+            $_SESSION['carrello'] = array();
             header('LOCATION:elenco.php');
           } else {
             echo '<p>la password non è corretta</p>';
