@@ -54,7 +54,7 @@ if (isset($_SESSION['utente'])) {
           oci_execute($statement);
           
           while ($row = oci_fetch_assoc($statement)) {
-            if (count($row) > 0) {
+            if (isset($row)) {
               $str = '<tr><td>'.$row['TITLE'].'</td><td>'.$row['ISBN'].'</td><td>'.$row['AUTHOR'].'</td><td>'.$row['CATEGORY_NAME'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$row['PAGES'].'</td><td>'.$row['PUB_DATE'].'</td><td>'.$row['PRICE'].' €</td><td>'.$row['QUANTITY'].'</td><td><form action="carrello.php" method="POST"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
               for ($i = 1; $i <= intval($row['QUANTITY']); $i++) {
                 $str .= '<option value='.$i.'>'.$i.'</option>';
@@ -62,7 +62,7 @@ if (isset($_SESSION['utente'])) {
               $str .= '</select><input type="submit" value="aggiungi al carrello"></form></td></tr>';
               echo $str;
             } else {
-              echo '<p>nessun elemento presente</p>';
+              echo '<tr><td>nessun elemento presente</td></tr>';
             }
           }
           oci_free_statement($statement);
@@ -76,7 +76,7 @@ if (isset($_SESSION['utente'])) {
           oci_execute($statement2);
 
           while ($row = oci_fetch_assoc($statement2)) {
-            if (count($row) > 0) {
+            if (isset($row)) {
               $str = '<tr><td>'.$row['TITLE'].'</td><td>'.$row['ISBN'].'</td><td>'.$row['AUTHOR'].'</td><td>'.$row['CATEGORY_NAME'].'</td><td>'.$row['DESCRIPTION'].'</td><td>'.$row['PAGES'].'</td><td>'.$row['PUB_DATE'].'</td><td>'.$row['PRICE'].' €</td><td>'.$row['QUANTITY'].'</td><td><form action="carrello.php" method="POST"><input type="hidden" name="bookid" value="'.$row['BOOK_ID'].'"><select name="bookqty">';
               for ($i = 1; $i <= intval($row['QUANTITY']); $i++) {
                 $str .= '<option value='.$i.'>'.$i.'</option>';
@@ -84,7 +84,7 @@ if (isset($_SESSION['utente'])) {
               $str .= '</select><input type="submit" value="aggiungi al carrello"></form></td></tr>';
               echo $str;
             } else {
-              echo '<p>nessun elemento presente</p>';
+              echo '<tr><td>nessun elemento presente</td></tr>';
             }
           }
 
