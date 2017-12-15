@@ -8,16 +8,17 @@ try {
   header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
   // mi faccio dare dall'utente i dati
-  $username = $_POST['username'];
-  $first_name = $_POST['firstname'];
-  $last_name = $_POST['lastname'];
-  $mail = $_POST['mail'];
-  $phone = $_POST['phone'];
-  $address = $_POST['address'];
-  $city = $_POST['city'];
-  $password = $_POST['password'];
-  $postal_code = $_POST['postalcode'];
-  $country = $_POST['country'];
+  $posted = json_decode(file_get_contents("php://input"));
+  $username = $posted->username;
+  $first_name = $posted->firstname;
+  $last_name = $posted->lastname;
+  $mail = $posted->mail;
+  $phone = $posted->phone;
+  $address = $posted->address;
+  $city = $posted->city;
+  $password = $posted->password;
+  $postal_code = $posted->postalcode;
+  $country = $posted->country;
 
   // creo un array che conterrà lq righe restituitedal db
   $data = array();

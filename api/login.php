@@ -8,8 +8,9 @@ try {
   header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
   // mi faccio dare dall'utente usrname e password
-  $username = $_POST['username'];
-  $password = $_POST['password'];
+  $posted = json_decode(file_get_contents("php://input"));
+  $username = $posted->username;
+  $password = $posted->password;
 
   // creo la query parametrizzata
   $query = 'SELECT * FROM USERS WHERE USERNAME = :usrn';
@@ -34,7 +35,7 @@ try {
       $input = hash('sha512', $password.$user['SALT']);
       //controllo che la password sia uguale alla password sul db
       if (strcmp($input, $user['PASSWORD']) == 0) {
-        $_SESSION['utente'] = $data;
+        $_SESSION['utente'] = $user;
         $_SESSION['carrello'] = array();
         echo json_encode(true);
       } else {
