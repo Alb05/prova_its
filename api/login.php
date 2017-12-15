@@ -14,7 +14,7 @@ try {
   // creo la query parametrizzata
   $query = 'SELECT * FROM USERS WHERE USERNAME = :usrn';
 
-  // creo un array che conterrà le righe restituite dal db
+  // creo un array che conterrà lq righe restituitedal db
   $data = array();
 
   // eseguo la query sul db passando l'username al parametro :usrn
@@ -34,19 +34,17 @@ try {
       $input = hash('sha512', $password.$user['SALT']);
       //controllo che la password sia uguale alla password sul db
       if (strcmp($input, $user['PASSWORD']) == 0) {
-        echo json_encode($data[0]);
-        //http_response_code(200);
+        $_SESSION['utente'] = $data;
+        $_SESSION['carrello'] = array();
+        echo json_encode(true);
       } else {
-        echo json_encode(NULL);
-        //http_response_code(200);
+        echo json_encode(false);
       }
     } else {
-      echo json_encode(NULL);
-      //http_response_code(500);
+      echo json_encode(false);
     }
   } else {
-    echo json_encode(NULL);
-    //http_response_code(500);
+    echo json_encode(false);
   }
   oci_free_statement($statement);
 }

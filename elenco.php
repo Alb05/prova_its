@@ -12,6 +12,7 @@ if (isset($_SESSION['utente'])) {
   </head>
   <body>
     <h1>Elenco</h1>
+    <h3><?php echo "Benvenuto ".$_SESSION['utente'][0]['FIRST_NAME']." ".$_SESSION['utente'][0]['LAST_NAME']; ?></h3>
     <a href="logout.php"><button>Logout</button></a>
     <a href="carrello.php"><button>Carrello</button></a><br>
     <form action="elenco.php" method="GET">
