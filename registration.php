@@ -72,7 +72,7 @@
           $insert_query = 'INSERT INTO USERS (USERNAME, FIRST_NAME, LAST_NAME, MAIL, PHONE, ADDRESS, CITY, SALT, PASSWORD, GROUP_ID, CREATED_AT, POSTAL_CODE, COUNTRY) VALUES (:username, :firstname, :lastname, :mail, :phone, :address, :city, :salt, :password, 2, CURRENT_DATE, :postalcode, :country)';
           
           // controllo che la mail sia corretta
-          if (preg_match('/^.*\@.*\..*$/', $mail)) {
+          if (preg_match('/^.+\@.+\..{2,}$/', $mail)) {
             // genero il sale e la password
             $salt = hash('sha512', openssl_random_pseudo_bytes(128));
             $password_hash = hash('sha512', $password.$salt);

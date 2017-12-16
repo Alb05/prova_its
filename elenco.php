@@ -32,16 +32,18 @@ if (isset($_SESSION['utente'])) {
     </form>
     <table cellpadding="8px" border="1px">
       <thead>
-        <th>Titolo</th>
-        <th>ISBN</th>
-        <th>Autore</th>
-        <th>Categoria</th>
-        <th>Descrizione</th>
-        <th>Numero di pagine</th>
-        <th>Data di pubblicazione</th>
-        <th>Prezzo</th>
-        <th>Quantità disponibile</th>
-        <th>Aggiungi</th>
+        <tr>
+          <th>Titolo</th>
+          <th>ISBN</th>
+          <th>Autore</th>
+          <th>Categoria</th>
+          <th>Descrizione</th>
+          <th>Numero di pagine</th>
+          <th>Data di pubblicazione</th>
+          <th>Prezzo</th>
+          <th>Quantità disponibile</th>
+          <th>Aggiungi</th>
+        </tr>
       </thead>
       <tbody>
       <?php

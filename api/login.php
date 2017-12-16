@@ -38,6 +38,7 @@ try {
         $_SESSION['utente'] = $user;
         $_SESSION['carrello'] = array();
         echo json_encode(true);
+        //header('LOCATION:/home');
       } else {
         echo json_encode(false);
       }

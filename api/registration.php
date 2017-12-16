@@ -62,18 +62,23 @@ try {
         // faccio il commit delle modifiche
         if (oci_commit($conn)) {
           echo json_encode(true);
+          //header('LOCATION:/login');
         } else {
           echo json_encode(false);
+          //header('LOCATION:/login');
         }
       } else {
         echo json_encode(false);
+        //header('LOCATION:/login');
       }
       oci_free_statement($insert_statement);
     } else {
       echo json_encode(false);
+      //header('LOCATION:/login');
     }
   } else {
     echo json_encode(false);
+    //header('LOCATION:/login');
   }
 }
 finally {
