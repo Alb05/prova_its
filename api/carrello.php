@@ -39,8 +39,8 @@ if (isset($_SESSION['utente'])) {
             $data[] = $row;
           }
           oci_free_statement($statement);
-          echo json_encode($data);
         }
+        echo json_encode($data);
       }
     }
   }
