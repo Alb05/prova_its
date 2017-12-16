@@ -1,12 +1,13 @@
 <?php
 include('conn.php');
+
+header('Content-Type: application/json;charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+
 if (isset($_SESSION['utente'])) {
   try {
-    header('Content-Type: application/json;charset=utf-8');
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
-
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $posted = json_decode(file_get_contents("php://input"));
       $bookid = $posted->bookid;
@@ -34,6 +35,7 @@ if (isset($_SESSION['utente'])) {
           oci_bind_by_name($statement, ':bookid', $libro['BOOK_ID']);
           oci_execute($statement);
           while ($row = oci_fetch_assoc($statement)) {
+            $row["QUANTITY"] = $libro['QUANTITY'];
             $data[] = $row;
           }
           oci_free_statement($statement);

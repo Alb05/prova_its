@@ -9,10 +9,15 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 if (isset($_SESSION['utente'])) {
   $posted = json_decode(file_get_contents("php://input"));
   $bookid = $posted->bookid;
+  $bookqty = $posted->bookqty;
 
   for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
     if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
-      unset($_SESSION['carrello'][$i]);
+      if ($_SESSION['carrello'][$i]['QUANTITY'] <= $bookqty) {
+        unset($_SESSION['carrello'][$i]);
+      } else {
+        $_SESSION['carrello'][$i]['QUANTITY'] -= $bookqty;
+      }
     }
   }
   //header('LOCATION:carrello.php');
