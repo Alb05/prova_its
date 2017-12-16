@@ -36,11 +36,13 @@ if (isset($_POST['bookid']) && isset($_POST['bookqty'])) {
     ?>
     <table cellpadding="8px" border="1px">
       <thead>
-        <th>Titolo</th>
-        <th>Descrizione</th>
-        <th>Quantità</th>
-        <th>Prezzo Totale</th>
-        <th>Rimuovi</th>
+        <tr>
+          <th>Titolo</th>
+          <th>Descrizione</th>
+          <th>Quantità</th>
+          <th>Prezzo Totale</th>
+          <th>Rimuovi</th>
+        </tr>
       </thead>
       <tbody>
         <?php
