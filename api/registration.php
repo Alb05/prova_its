@@ -25,9 +25,9 @@ try {
   $user = array();
 
   // creo la query parametrizzata per cercare l'utente
-  $search_query = 'SELECT USERNAME FROM USERS WHERE USERNAME = :usrn';
+  $search_query = 'SELECT USERNAME FROM USERS WHERE MAIL = :mail';
   $search_statement = oci_parse($conn, $search_query);
-  oci_bind_by_name($search_statement, ':usrn', $username);
+  oci_bind_by_name($search_statement, ':mail', $mail);
 
   // eseguo la query di ricerca
   if (oci_execute($search_statement)) {
