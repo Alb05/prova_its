@@ -10,11 +10,12 @@ if (isset($_SESSION['utente'])) {
   try {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $posted = json_decode(file_get_contents("php://input"));
+      $bookid = $posted->bookid;
+      $bookqty = $posted->bookqty;
       $method = $posted->method;
+
       if (isset($method)) {
         if ($method == 'add') {
-          $bookid = $posted->bookid;
-          $bookqty = $posted->bookqty;
           if (isset($bookid) && isset($bookqty)) {
             $inserted = false;
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
@@ -31,8 +32,6 @@ if (isset($_SESSION['utente'])) {
             echo json_encode(false);
           }
         } elseif ($method == 'modify') {
-          $bookid = $posted->bookid;
-          $bookqty = $posted->bookqty;
           if (isset($bookid) && isset($bookqty)) {
             $inserted = false;
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
@@ -50,11 +49,10 @@ if (isset($_SESSION['utente'])) {
             echo json_encode(false);
           }
         } elseif ($method == 'remove') {
-          $bookid = $posted->bookid;
-
           for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
             if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
               unset($_SESSION['carrello'][$i]);
+              $_SESSION['carrello'] = array_values($_SESSION['carrello']);
             }
           }
           echo json_encode(true);
