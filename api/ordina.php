@@ -69,7 +69,4 @@ if (isset($_SESSION['utente'])) {
     oci_close($conn);
     exit();
   }
-} else {
-  echo json_encode(false);
-  //header('refresh:3;index.php');
 }

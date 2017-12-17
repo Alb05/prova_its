@@ -38,18 +38,14 @@ try {
         $_SESSION['utente'] = $user;
         $_SESSION['carrello'] = array();
         echo json_encode(true);
-        //header('LOCATION:http://api.mano/home');
       } else {
         echo json_encode(false);
-        //header('LOCATION:http://api.mano/login');
       }
     } else {
       echo json_encode(false);
-      //header('LOCATION:http://api.mano/login');
     }
   } else {
     echo json_encode(false);
-    //header('LOCATION:http://api.mano/login');
   }
   oci_free_statement($statement);
 }

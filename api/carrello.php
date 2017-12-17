@@ -43,8 +43,9 @@ if (isset($_SESSION['utente'])) {
             }
             if (!$inserted) {
               echo json_encode(false);
+            } else {
+              echo json_encode(true);
             }
-            echo json_encode(true);
           } else {
             echo json_encode(false);
           }
@@ -56,7 +57,6 @@ if (isset($_SESSION['utente'])) {
               unset($_SESSION['carrello'][$i]);
             }
           }
-          //header('LOCATION:carrello.php');
           echo json_encode(true);
         } else {
           echo json_encode(false);
@@ -83,7 +83,4 @@ if (isset($_SESSION['utente'])) {
   finally {
     oci_close($conn);
   }
-} else {
-  echo json_encode(false);
-  //header('refresh:3;index.php');
 }
