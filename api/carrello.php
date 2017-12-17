@@ -10,32 +10,68 @@ if (isset($_SESSION['utente'])) {
   try {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $posted = json_decode(file_get_contents("php://input"));
-      $bookid = $posted->bookid;
-      $bookqty = $posted->bookqty;
-
-      if (isset($bookid) && isset($bookqty)) {
-        $inserted = false;
-        for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
-          if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
-            $_SESSION['carrello'][$i]['QUANTITY'] += $bookqty;
-            $inserted = true;
+      $method = $posted->method;
+      if (isset($method)) {
+        if ($method == 'add') {
+          $bookid = $posted->bookid;
+          $bookqty = $posted->bookqty;
+          if (isset($bookid) && isset($bookqty)) {
+            $inserted = false;
+            for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+              if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
+                $_SESSION['carrello'][$i]['QUANTITY'] += $bookqty;
+                $inserted = true;
+              }
+            }
+            if (!$inserted) {
+              $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
+            }
+            echo json_encode(true);
+          } else {
+            echo json_encode(false);
           }
+        } elseif ($method == 'modify') {
+          $bookid = $posted->bookid;
+          $bookqty = $posted->bookqty;
+          if (isset($bookid) && isset($bookqty)) {
+            $inserted = false;
+            for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+              if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
+                $_SESSION['carrello'][$i]['QUANTITY'] = $bookqty;
+                $inserted = true;
+              }
+            }
+            if (!$inserted) {
+              echo json_encode(false);
+            }
+            echo json_encode(true);
+          } else {
+            echo json_encode(false);
+          }
+        } elseif ($method == 'remove') {
+          $bookid = $posted->bookid;
+
+          for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+            if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
+              unset($_SESSION['carrello'][$i]);
+            }
+          }
+          //header('LOCATION:carrello.php');
+          echo json_encode(true);
+        } else {
+          echo json_encode(false);
         }
-        if (!$inserted) {
-          $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
-        }
-        echo json_encode(true);
       }
     } else {
       $data = array();
       if (count($_SESSION['carrello']) > 0) {
         foreach ($_SESSION['carrello'] as $libro) {
-          $query = 'SELECT BOOK_ID, TITLE, DESCRIPTION, PRICE FROM BOOKS WHERE BOOK_ID = :bookid ORDER BY TITLE';
+          $query = 'SELECT b.BOOK_ID, b.TITLE, b.DESCRIPTION, b.PRICE, w.QUANTITY FROM BOOKS b, WAREHOUSE w WHERE b.BOOK_ID = w.BOOK_ID AND b.BOOK_ID = :bookid ORDER BY b.TITLE';
           $statement = oci_parse($conn, $query);
           oci_bind_by_name($statement, ':bookid', $libro['BOOK_ID']);
           oci_execute($statement);
           while ($row = oci_fetch_assoc($statement)) {
-            $row["QUANTITY"] = $libro['QUANTITY'];
+            $row["ORD_QTY"] = $libro['QUANTITY'];
             $data[] = $row;
           }
           oci_free_statement($statement);

@@ -9,18 +9,18 @@ try {
 
   // mi faccio dare dall'utente usrname e password
   $posted = json_decode(file_get_contents("php://input"));
-  $username = $posted->username;
+  $mail = $posted->mail;
   $password = $posted->password;
 
   // creo la query parametrizzata
-  $query = 'SELECT * FROM USERS WHERE USERNAME = :usrn';
+  $query = 'SELECT * FROM USERS WHERE MAIL = :mail';
 
   // creo un array che conterrà lq righe restituitedal db
   $data = array();
 
   // eseguo la query sul db passando l'username al parametro :usrn
   $statement = oci_parse($conn, $query);
-  oci_bind_by_name($statement, ':usrn', $username);
+  oci_bind_by_name($statement, ':mail', $mail);
 
   if (oci_execute($statement)) {
     // mi faccio dare dal db le righe e le aggiungo all'array
