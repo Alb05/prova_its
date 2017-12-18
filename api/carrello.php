@@ -32,15 +32,17 @@ if (isset($_SESSION['utente'])) {
                 }
               }
             }
-            if (!$inserted && !$found) {
+            if (!$found) {
               if ($row['QUANTITY'] >= $bookqty && $bookqty > 0) {
                 $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
                 echo json_encode(true);
               } else {
                 echo json_encode(false);
               }
-            } else {
+            } elseif ($found && !$inserted) {
               echo json_encode(false);
+            } else {
+              echo json_encode(true);
             }
           } else {
             echo json_encode(false);
