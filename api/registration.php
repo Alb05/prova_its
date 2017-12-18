@@ -68,6 +68,7 @@ try {
           //header('LOCATION:/login');
         }
       } else {
+        oci_rollback($conn);
         echo json_encode(false);
         //header('LOCATION:/login');
       }
