@@ -17,25 +17,45 @@ if (isset($_SESSION['utente'])) {
       if (isset($method)) {
         if ($method == 'add') {
           if (isset($bookid) && isset($bookqty)) {
+            $quantity_query = 'SELECT QUANTITY FROM WAREHOUSE WHERE BOOK_ID = :bookid';
+            $quantity_stmt = oci_parse($conn, $quantity_query);
+            oci_bind_by_name($quantity_stmt, ':bookid', $bookid);
+            oci_execute($quantity_stmt);
+            $row = oci_fetch_assoc($quantity_stmt);
             $inserted = false;
+            $found = false;
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
               if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
-                $_SESSION['carrello'][$i]['QUANTITY'] += $bookqty;
-                $inserted = true;
+                $found = true;
+                if ($row['QUANTITY'] >= ($_SESSION['carrello'][$i]['QUANTITY'] + $bookqty) && $bookqty > 0) {
+                  $_SESSION['carrello'][$i]['QUANTITY'] += $bookqty;
+                  $inserted = true;
+                }
               }
             }
-            if (!$inserted) {
-              $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
+            if (!$inserted && !$found) {
+              if ($row['QUANTITY'] >= $bookqty && $bookqty > 0) {
+                $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
+                echo json_encode(true);
+              } else {
+                echo json_encode(false);
+              }
+            } else {
+              echo json_encode(false);
             }
-            echo json_encode(true);
           } else {
             echo json_encode(false);
           }
         } elseif ($method == 'modify') {
           if (isset($bookid) && isset($bookqty)) {
+            $quantity_query = 'SELECT QUANTITY FROM WAREHOUSE WHERE BOOK_ID = :bookid';
+            $quantity_stmt = oci_parse($conn, $quantity_query);
+            oci_bind_by_name($quantity_stmt, ':bookid', $bookid);
+            oci_execute($quantity_stmt);
+            $row = oci_fetch_assoc($quantity_stmt);
             $inserted = false;
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
-              if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
+              if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid && $row['QUANTITY'] >= $bookqty) {
                 $_SESSION['carrello'][$i]['QUANTITY'] = $bookqty;
                 $inserted = true;
               }

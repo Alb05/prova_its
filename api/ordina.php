@@ -29,7 +29,7 @@ if (isset($_SESSION['utente'])) {
           oci_bind_by_name($quantity_stmt, ':bookid', $book['BOOK_ID']);
           if (oci_execute($quantity_stmt)) {
             $row = oci_fetch_assoc($quantity_stmt);
-            if ($row['QUANTITY'] >= $book['QUANTITY']) {
+            if ($row['QUANTITY'] >= $book['QUANTITY'] && $book['QUANTITY'] > 0) {
               $modify_query = 'UPDATE WAREHOUSE SET QUANTITY=:bookqty WHERE BOOK_ID = :bookid';
               $modify_stmt = oci_parse($conn, $modify_query);
               $quantity = intval($row['QUANTITY']) - intval($book['QUANTITY']);
