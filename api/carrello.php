@@ -44,6 +44,7 @@ if (isset($_SESSION['utente'])) {
             } else {
               echo json_encode(true);
             }
+            oci_free_statement($quantity_stmt);
           } else {
             echo json_encode(false);
           }
@@ -68,6 +69,7 @@ if (isset($_SESSION['utente'])) {
             } else {
               echo json_encode(true);
             }
+            oci_free_statement($quantity_stmt);
           } else {
             echo json_encode(false);
           }
