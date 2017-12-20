@@ -43,7 +43,7 @@ try {
       $salt = hash('sha512', openssl_random_pseudo_bytes(128));
       $password_hash = hash('sha512', $password.$salt);
 
-      // eseguo la query sul db passando l'username al parametro :usrn
+      // eseguo la query sul db passando le variabili
       $insert_statement = oci_parse($conn, $insert_query);
       oci_bind_by_name($insert_statement, ':username', $username);
       oci_bind_by_name($insert_statement, ':firstname', $first_name);

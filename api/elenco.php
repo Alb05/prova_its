@@ -35,7 +35,7 @@ if (isset($_SESSION['utente'])) {
       // creo la query parametrizzata
       $query = "SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND b.TITLE LIKE :title ORDER BY b.TITLE";
       $title = '%'.$_GET['title'].'%';
-      // eseguo la query sul db passando l'username al parametro :usrn
+      // eseguo la query sul db passando l'username al parametro :title
       $statement = oci_parse($conn, $query);
       oci_bind_by_name($statement, ':title', $title);
       oci_execute($statement);
@@ -47,7 +47,6 @@ if (isset($_SESSION['utente'])) {
       // creo la query parametrizzata
       $query = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 ORDER BY b.TITLE';
   
-      // eseguo la query sul db passando l'username al parametro :usrn
       $statement = oci_parse($conn, $query);
       oci_execute($statement);
   

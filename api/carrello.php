@@ -8,14 +8,18 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 if (isset($_SESSION['utente'])) {
   try {
+    // controllo il tipo di richiesta
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+      // se la richiesta è di tipo POST leggo l'operazione da effettuare
       $posted = json_decode(file_get_contents("php://input"));
       $method = $posted->method;
       if (isset($method)) {
+        // se la richiesta è per aggiungere un elemento
         if ($method == 'add') {
           $bookid = $posted->bookid;
           $bookqty = $posted->bookqty;
           if (isset($bookid) && isset($bookqty)) {
+            // mi faccio dare dal db la quantità dl libro selezionato
             $quantity_query = 'SELECT QUANTITY FROM WAREHOUSE WHERE BOOK_ID = :bookid';
             $quantity_stmt = oci_parse($conn, $quantity_query);
             oci_bind_by_name($quantity_stmt, ':bookid', $bookid);
@@ -23,15 +27,18 @@ if (isset($_SESSION['utente'])) {
             $row = oci_fetch_assoc($quantity_stmt);
             $inserted = false;
             $found = false;
+            // cerco il libro nel carrello
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
               if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
                 $found = true;
+                // se lo trovo lo aggiungo al carrello solo se la quantità richiesta è disponibile
                 if ($row['QUANTITY'] >= ($_SESSION['carrello'][$i]['QUANTITY'] + $bookqty) && $bookqty > 0) {
                   $_SESSION['carrello'][$i]['QUANTITY'] += $bookqty;
                   $inserted = true;
                 }
               }
             }
+            // se il libro non è stato trovato lo aggiungo al carrello se la quantità richiesta è disponibile
             if (!$found) {
               if ($row['QUANTITY'] >= $bookqty && $bookqty > 0) {
                 $_SESSION['carrello'][] = array('BOOK_ID' => $bookid, 'QUANTITY' => $bookqty);
@@ -39,8 +46,10 @@ if (isset($_SESSION['utente'])) {
               } else {
                 echo json_encode(false);
               }
+            // se il libro è stato trovato ma non inserito
             } elseif ($found && !$inserted) {
               echo json_encode(false);
+            // se il libro è stato trovato e inserito
             } else {
               echo json_encode(true);
             }
@@ -49,9 +58,11 @@ if (isset($_SESSION['utente'])) {
             echo json_encode(false);
           }
         } elseif ($method == 'modify') {
+          // se la richieasta è per la modifica di un elemento nel carrello
           $bookid = $posted->bookid;
           $bookqty = $posted->bookqty;
           if (isset($bookid) && isset($bookqty)) {
+            // mi faccio dare dal db la quantità dl libro selezionato
             $quantity_query = 'SELECT QUANTITY FROM WAREHOUSE WHERE BOOK_ID = :bookid';
             $quantity_stmt = oci_parse($conn, $quantity_query);
             oci_bind_by_name($quantity_stmt, ':bookid', $bookid);
@@ -59,6 +70,7 @@ if (isset($_SESSION['utente'])) {
             $row = oci_fetch_assoc($quantity_stmt);
             $inserted = false;
             for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+              // cerco l'elemento e se la quantità richiesta è disponibile lo modifico
               if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid && $row['QUANTITY'] >= $bookqty && $bookqty > 0) {
                 $_SESSION['carrello'][$i]['QUANTITY'] = $bookqty;
                 $inserted = true;
@@ -74,8 +86,11 @@ if (isset($_SESSION['utente'])) {
             echo json_encode(false);
           }
         } elseif ($method == 'remove') {
+          // per rimuovere l'elemento
           $bookid = $posted->bookid;
+          // cero l'elemento nel carrello
           for ($i = 0; $i < count($_SESSION['carrello']); $i++) {
+            // se lo trovo lo rimuovo dal carrello
             if ($_SESSION['carrello'][$i]['BOOK_ID'] == $bookid) {
               unset($_SESSION['carrello'][$i]);
               $_SESSION['carrello'] = array_values($_SESSION['carrello']);
@@ -87,6 +102,7 @@ if (isset($_SESSION['utente'])) {
         }
       }
     } else {
+      // se la richiesta è una GET restituisco il contenuto del carrello
       $data = array();
       if (count($_SESSION['carrello']) > 0) {
         foreach ($_SESSION['carrello'] as $libro) {
