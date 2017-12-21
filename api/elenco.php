@@ -12,8 +12,8 @@ if (isset($_SESSION['utente'])) {
     // creo un array che conterrà le righe restituite dal db
     $data = array();
     if (isset($_GET['category']) && $_GET['category'] > 0 && isset($_GET['title'])) {
-      $query = 'SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND b.CATEGORY_ID = :cat AND b.TITLE LIKE :title ORDER BY b.TITLE';
-      $title = '%'.$_GET['title'].'%';
+      $query = "SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND b.CATEGORY_ID = :cat AND REGEXP_LIKE(b.TITLE, :title, 'i') ORDER BY b.TITLE";
+      $title = $_GET['title'];
       $statement = oci_parse($conn, $query);
       oci_bind_by_name($statement, ':cat', $_GET['category']);
       oci_bind_by_name($statement, ':title', $title);          
@@ -33,8 +33,8 @@ if (isset($_SESSION['utente'])) {
       }
     } elseif (isset($_GET['title'])) {
       // creo la query parametrizzata
-      $query = "SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND b.TITLE LIKE :title ORDER BY b.TITLE";
-      $title = '%'.$_GET['title'].'%';
+      $query = "SELECT b.BOOK_ID, b.TITLE, b.ISBN, b.AUTHOR, c.CATEGORY_NAME, b.DESCRIPTION, b.PAGES, b.PUB_DATE, b.PRICE, w.QUANTITY FROM BOOKS b, CATEGORIES c, WAREHOUSE w WHERE b.CATEGORY_ID = c.CATEGORY_ID AND b.BOOK_ID = w.BOOK_ID AND w.QUANTITY > 0 AND REGEXP_LIKE(b.TITLE, :title, 'i') ORDER BY b.TITLE";
+      $title = $_GET['title'];
       // eseguo la query sul db passando l'username al parametro :title
       $statement = oci_parse($conn, $query);
       oci_bind_by_name($statement, ':title', $title);
