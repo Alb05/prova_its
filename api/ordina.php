@@ -11,7 +11,7 @@ if (isset($_SESSION['utente'])) {
   try {
     // se ci sono elementi nel carrello creo l'ordine
     if (count($_SESSION['carrello']) > 0) {
-      $insert_query = 'INSERT INTO ORDERS (USER_ID, ORDER_DATE, ORDER_STATUS) VALUES (:userid, CURRENT_DATE, 1)';
+      $insert_query = 'INSERT INTO ORDERS (USER_ID, ORDER_DATE) VALUES (:userid, CURRENT_DATE)';
       $insert_stmt = oci_parse($conn, $insert_query);
       oci_bind_by_name($insert_stmt, ':userid', $user['USER_ID']);
       oci_execute($insert_stmt);
