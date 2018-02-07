@@ -2,7 +2,7 @@
 include('conn.php');
 
 function retOrd($conn, $orderid, $bookid, $bookqty) {
-  $find_query = "SELECT QUANTITY_SOLD FROM ORDER_ITEMS WHERE ORDER_ID = :orderid AND BOOK_ID = :bookid";
+  $find_query = "SELECT i.QUANTITY_SOLD FROM ORDER_ITEMS i, ORDER_RETURN r WHERE i.ORDER_ID = r.ORDER_ID AND i.BOOK_ID = r.BOOK_ID AND i.ORDER_ID = :orderid AND i.BOOK_ID = :bookid";
   $find_statement = oci_parse($conn, $find_query);
   oci_bind_by_name($find_statement, ':orderid', $orderid);
   oci_bind_by_name($find_statement, ':bookid', $bookid);
@@ -10,7 +10,7 @@ function retOrd($conn, $orderid, $bookid, $bookqty) {
   $row = oci_fetch_assoc($find_statement);
   if ($row) {
     if ($bookqty > 0 && $bookqty <= $row['QUANTITY_SOLD']) {
-      $update_query = "UPDATE ORDER_RETURN SET QUANTITY_RETURNED = :bookqty WHERE ORDER_ID = :orderid AND BOOK_ID = :bookid";
+      $update_query = "UPDATE ORDER_RETURN SET QUANTITY_RETURNED = :bookqty WHERE ORDER_ID = :orderid AND BOOK_ID = :bookid AND STATUS_ID = 1";
       $update_statement = oci_parse($conn, $update_query);
       oci_bind_by_name($update_statement, ':orderid', $orderid);
       oci_bind_by_name($update_statement, ':bookid', $bookid);
