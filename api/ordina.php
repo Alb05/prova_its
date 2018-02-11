@@ -42,7 +42,7 @@ if (isset($_SESSION['utente'])) {
               oci_free_statement($modify_stmt);
 
               // inserisco il libro nella lista dell'ordine
-              $insert2_query = 'INSERT INTO ORDER_ITEMS (ORDER_ID, BOOK_ID, QUANTITY_SOLD) VALUES (:ordid, :bookid, :bookqty)';
+              $insert2_query = 'INSERT INTO ORDER_ITEMS (ORDER_ID, BOOK_ID, QUANTITY_SOLD, PRICE) VALUES (:ordid, :bookid, :bookqty, (SELECT PRICE FROM BOOKS WHERE BOOK_ID = :bookid))';
               $insert2_stmt = oci_parse($conn, $insert2_query);
               oci_bind_by_name($insert2_stmt, ':ordid', $order['ORDER_ID']);
               oci_bind_by_name($insert2_stmt, ':bookid', $book['BOOK_ID']);

@@ -19,7 +19,7 @@ if (isset($_SESSION['utente'])) {
           $bookid = $posted->bookid;
           $bookqty = $posted->bookqty;
           if (isset($bookid) && isset($bookqty)) {
-            // mi faccio dare dal db la quantità dl libro selezionato
+            // mi faccio dare dal db la quantità del libro selezionato
             $quantity_query = 'SELECT QUANTITY FROM WAREHOUSE WHERE BOOK_ID = :bookid';
             $quantity_stmt = oci_parse($conn, $quantity_query);
             oci_bind_by_name($quantity_stmt, ':bookid', $bookid);
@@ -106,7 +106,7 @@ if (isset($_SESSION['utente'])) {
       $data = array();
       if (count($_SESSION['carrello']) > 0) {
         foreach ($_SESSION['carrello'] as $libro) {
-          $query = 'SELECT b.BOOK_ID, b.TITLE, b.DESCRIPTION, b.PRICE, w.QUANTITY FROM BOOKS b, WAREHOUSE w WHERE b.BOOK_ID = w.BOOK_ID AND b.BOOK_ID = :bookid ORDER BY b.TITLE';
+          $query = 'SELECT b.BOOK_ID, b.PHOTO, b.TITLE, b.DESCRIPTION, b.PRICE, w.QUANTITY FROM BOOKS b, WAREHOUSE w WHERE b.BOOK_ID = w.BOOK_ID AND b.BOOK_ID = :bookid ORDER BY b.TITLE';
           $statement = oci_parse($conn, $query);
           oci_bind_by_name($statement, ':bookid', $libro['BOOK_ID']);
           oci_execute($statement);
